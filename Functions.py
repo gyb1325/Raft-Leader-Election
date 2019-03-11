@@ -13,14 +13,14 @@ def acceptor(server, data, addr):
     sender = Msg.sender
     term = Msg.term
     if type == 1: # RequestVote
-        print("Receive Request Vote Message from {}".format(sender))
+        print("Receive Request Vote Message from {}".format(sender)+ " Time Stamp: " + time.asctime())
         if sender not in server.peers:
             return
         msg = Msg.data
         msg = msg.split(" ")
 
         if term < server.cur_term:
-            print("Reject vote due to old term")
+            print("Reject vote due to old term"+ " Time Stamp: " + time.asctime())
             voteGranted = 0
 
         elif term == server.cur_term:
@@ -43,7 +43,7 @@ def acceptor(server, data, addr):
         sock.sendto(pickle.dumps(reply_msg),("", server.serverlist[sender]))
 
     elif type == 2: #VoteResponseMsg
-        print("Receive Vote Response Msg from server {}".format(sender))
+        print("Receive Vote Response Msg from server {}".format(sender)+ " Time Stamp: " + time.asctime())
         msg = Msg.data
         voteGranted = int(msg)
         if voteGranted:
@@ -51,7 +51,7 @@ def acceptor(server, data, addr):
                 server.request_votes.remove(sender)
                 server.numVotes += 1
                 if server.numVotes == server.majority:
-                    print("Get majority Vote, become the leader at term {}".format(server.cur_term))
+                    print("Get majority Vote, become the leader at term {}".format(server.cur_term)+ " Time Stamp: " + time.asctime())
                     if server.election.is_alive():
                         server.election.kill()
                     server.role = "leader"
@@ -65,7 +65,7 @@ def acceptor(server, data, addr):
                     server.step_down()
 
     elif type == 0:
-        print("Receive heartbeat from {}".format(sender))
+        print("Receive heartbeat from {}".format(sender)+ " Time Stamp: " + time.asctime())
         if term >= server.cur_term:
             server.cur_term = term
             server.step_down()
@@ -85,7 +85,7 @@ def acceptor(server, data, addr):
             if term > server.cur_term:
                 server.step_down()
         else:
-            print("Receive heartbeat response from {}".format(sender))
+            print("Receive heartbeat response from {}".format(sender)+ " Time Stamp: " + time.asctime())
 
 
 

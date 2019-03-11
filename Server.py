@@ -46,7 +46,7 @@ class Server:
         srv.close()
 
     def follow(self):
-        print("The current state is a follower")
+        print("The current state is a follower"+ " Time Stamp: " + time.asctime())
         self.role = "follower"
         self.last_update = time.time()
         time_out = 5 + random.random() * 5
@@ -66,7 +66,7 @@ class Server:
 
     def start_election(self):
         self.role = "cadidate"
-        print("The current state is a candidate")
+        print("The current state is a candidate"+ " Time Stamp: " + time.asctime())
         self.election = kthread.KThread(target = self.thread_election, args =())
         if len(self.peers) != 0:
             self.cur_term += 1
@@ -77,7 +77,7 @@ class Server:
 
 
     def thread_election(self):
-        print("Timeout, a new election process is started at term {}, the id is {}".format( self.cur_term, self.id))
+        print("Timeout, a new election process is started at term {}, the id is {}".format( self.cur_term, self.id) + " Time Stamp: " + time.asctime())
         self.role = "candidate"
         self.request_votes =self.peers.copy()
         requestor = self.id
@@ -91,7 +91,7 @@ class Server:
                     sock.sendto(data,("", self.serverlist[peer]))
             time.sleep(1)
     def leader(self):
-        print("The current state is a leader")
+        print("The current state is a leader"+ " Time Stamp: " + time.asctime())
         self.role = "leader"
         self.send_heartbeats()
 
